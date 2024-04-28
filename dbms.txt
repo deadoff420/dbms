@@ -220,6 +220,69 @@ SELECT deptno, MIN(salary) AS min_salary
 FROM Employee
 WHERE job = 'Manager'
 GROUP BY deptno;
+7)
+(i) Create relations persons owns in sqL
+CREATE TABLE persons (
+    driver_id INT PRIMARY KEY,
+    name VARCHAR(50),
+    address VARCHAR(100)
+);
+
+CREATE TABLE owns (
+    driver_id INT,
+    license VARCHAR(20),
+    FOREIGN KEY (driver_id) REFERENCES persons(driver_id),
+    FOREIGN KEY (license) REFERENCES car(license),
+    PRIMARY KEY (driver_id, license)
+);
+(ii) Add a new accident to the database, assume any values for required attribute.
+INSERT INTO accident (report_number, date, location) VALUES (1001, '2024-04-29', 'City XYZ');
+(iii) Delete the SKODA belonging to 'Sachin Parker'.
+DELETE FROM owns
+WHERE driver_id = (SELECT driver_id FROM persons WHERE name = 'Sachin Parker') AND
+      license IN (SELECT license FROM car WHERE model = 'SKODA');
+
+(iv) Find the total number of people who owned cars that were involved in accident in 1999.
+SELECT COUNT(DISTINCT driver_id)
+FROM owns
+WHERE license IN (SELECT license FROM accident WHERE YEAR(date) = 1999);
+(v) Find the person whose names starts with 'S' and arrange in decreasing order of driver-id.
+SELECT *
+FROM persons
+WHERE name LIKE 'S%'
+ORDER BY driver_id DESC;
+8)
+Consider the employee database where the primary keys are underlined. Give
+an expression in SQL for the following gueries:
+employee (employee-name, street, city)
+works (employee-name, company-name, salary)
+company (company-name, city) manages (empolyee-name, manager-name)
+(i) Find all employees in the database who earn more than each employee of Small Bank Corporation.
+SELECT employee_name
+FROM works
+GROUP BY employee_name
+HAVING MAX(salary) > (SELECT MAX(salary) FROM works WHERE company_name = 'Small Bank Corporation');
+
+(ii) Find all employees in the database who do not work for First Bank Corporation. 
+SELECT employee_name
+FROM employee
+WHERE employee_name NOT IN (SELECT employee_name FROM works WHERE company_name = 'First Bank Corporation');
+(iii) Find all employees who earn more than the average salary of all employees of their company.
+SELECT w.employee_name
+FROM works w
+INNER JOIN (
+    SELECT company_name, AVG(salary) AS avg_salary
+    FROM works
+    GROUP BY company_name
+) AS avg_salaries
+ON w.company_name = avg_salaries.company_name
+WHERE w.salary > avg_salaries.avg_salary;
+
+(iv) Find the names of all employees who work for First Bank Corporation.
+SELECT employee_name
+FROM works
+WHERE company_name = 'First Bank Corporation';
+
 9) Create table employee with following attributes and insert 10 record (Apply following query)
 Employee(empno,ename,deptno,job,hiredate,salary)
 Department(deptno,dname,loc)
