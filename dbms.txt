@@ -40,6 +40,7 @@ SELECT COUNT(*)
 FROM Student 
 WHERE Branch = 'IT';
 
+
 2) Write a query in SQL to create a table employee and department. Employee(empno,ename,deptno,job,hiredate)
 Department(deptno,dname,loc)
  B. Include the following constraints on column of dept table.
@@ -75,7 +76,8 @@ iv) put the current date as default date in hire date column in case data is not
 column.
 ALTER TABLE Employee
 MODIFY COLUMN hiredate DATETIME DEFAULT CURRENT_TIMESTAMP;
-Write a query in SQL to create a table employee and department with following attributes. 
+
+3)Write a query in SQL to create a table employee and department with following attributes. 
 Employee(empno,ename,deptno,job,hiredate) Department(deptno,dname,loc)
 INSERT INTO Employee (empno, ename, deptno, job, hiredate) VALUES
 (1, 'John Doe', 20, 'Engineer', '2024-04-25'),
@@ -115,6 +117,7 @@ SET manager_no =
  END;
 SELECT *FROM Employee
 WHERE empno > manager_no;
+
 4. Find all manager not working in dept no 10 ?
 SELECT *
 FROM Employee
@@ -163,6 +166,8 @@ SELECT e.ename, e.job
 FROM Employee e
 JOIN Department d ON e.deptno = d.deptno
 WHERE d.loc = 'Chicago';
+
+
 5) Write a query in sql to create a table employee and department.
 Employee(empno,ename,deptno,job,hiredate,salary) Department(deptno,dname,loc)
 INSERT INTO Department (deptno, dname, loc) VALUES
@@ -198,6 +203,8 @@ FROM Employee e
 JOIN Department d ON e.deptno = d.deptno;
 5. Drop the above view
 DROP VIEW IF EXISTS EmployeeDetails;
+
+
 6) Write a query in sql to create a table employee and department.
 Employee(empno,ename,deptno,job,hiredate,salary)
 Department(deptno,dname,loc)
@@ -220,6 +227,8 @@ SELECT deptno, MIN(salary) AS min_salary
 FROM Employee
 WHERE job = 'Manager'
 GROUP BY deptno;
+
+
 7)
 (i) Create relations persons owns in sqL
 CREATE TABLE persons (
@@ -251,6 +260,8 @@ SELECT *
 FROM persons
 WHERE name LIKE 'S%'
 ORDER BY driver_id DESC;
+
+
 8)
 Consider the employee database where the primary keys are underlined. Give
 an expression in SQL for the following gueries:
@@ -282,6 +293,7 @@ WHERE w.salary > avg_salaries.avg_salary;
 SELECT employee_name
 FROM works
 WHERE company_name = 'First Bank Corporation';
+
 
 9) Create table employee with following attributes and insert 10 record (Apply following query)
 Employee(empno,ename,deptno,job,hiredate,salary)
@@ -331,6 +343,8 @@ CREATE VIEW SumSalaryByDept AS
 SELECT deptno, SUM(salary) AS total_salary
 FROM Employee
 GROUP BY deptno;
+
+
 10) Consider the following schema:
 Suppliers(sid: integer, sname: string, address: string)
 Parts(pid: integer, pname: string, color: string)
@@ -419,6 +433,8 @@ AND NOT EXISTS (
  JOIN Suppliers s2 ON c2.sid = s2.sid
  WHERE c.pid = c2.pid AND s2.sname <> 'Acme Widget Suppliers'
 );
+
+
 11) Create a table customer(acc_no, cust_name, avail_balance)
 Create table mini_statement(acc_no, avail_balance)
 Insert into customer following records:
@@ -452,6 +468,8 @@ BEGIN
 END;
 //
 DELIMITER ;
+
+
 12) Create a table customer(acc_no, cust_name, avail_balance) Create table micro_statement(acc_no, avail_balance) Insert 
 following record in table customer: Customer(1000, “Fanny”, 7000); Customer(1001,”Peter”, 12000); 
 Customer(1002,”Janitor”, 4500) Write a trigger to insert new values of acc_no and avail_balance in micro_statement after an 
@@ -483,6 +501,8 @@ BEGIN
 END;
 //
 DELIMITER ;
+
+
 13) Create a table customer (cust_id, cust_name, balance) and insert 3 records to it Write a transaction which update the 
 balance of all 3 customers and using TCL Commands(Commit, Rollback and Savepoint) show the changes made to actual 
 records
@@ -510,6 +530,9 @@ ROLLBACK TO changes_made;
 SELECT * FROM customer;
 -- Commit the transaction
 COMMIT;
+
+
+
 14) Create a table student (student_id, stud_name, percentage) and insert 3 records to it
 Write a transaction which update the percentage of all 3 students and using TCL Commands(Commit, Rollback
 and Savepoint) show the changes made to actual records
@@ -537,6 +560,8 @@ ROLLBACK TO changes_made;
 SELECT * FROM student;
 -- Commit the transaction
 COMMIT;
+
+
 15) Consider the relational database. Write an expression in SQL for following schema
 employee(employee-name, street, city)
 works(employee-name, company-name, salary)
@@ -602,6 +627,8 @@ v) Retrieve details of all employees whose ename starts with “P”
 SELECT *
 FROM employee
 WHERE employee_name LIKE 'P%';
+
+
 16) Consider an online bookstore database with the following tables: 
  books: Contains information about books such as book_id, title, author_id, genre_id, and price.
  authors: Contains information about authors such as author_id, author_name, and country. 
@@ -710,6 +737,8 @@ JOIN order_details od ON b.book_id = od.book_id
 GROUP BY a.author_name
 ORDER BY total_sales DESC
 LIMIT 1;
+
+
 17) We have a database for an online bookstore with relations books and customer, and we want to grant
 specific privileges to different users.
 Create a new user named 'bookstore_manager' with a password.
@@ -720,6 +749,8 @@ GRANT SELECT ON Employee TO 'bookstore_manager'@'%';
 Grant the INSERT, UPDATE, and DELETE privileges on the 'customers' table to the
 'bookstore_manager' user, allowing them to insert, update, and delete records in the 'customers' table.
 GRANT INSERT, UPDATE, DELETE ON Employee TO 'bookstore_manager'@'%';
+
+
 18) Let's consider a scenario where a customer places an order on our online bookstore. We want to ensure that
 the order process is treated as a single transaction. Apply TCL commands using following steps
 We begin a transaction using the BEGIN TRANSACTION command.
