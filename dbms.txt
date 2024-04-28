@@ -1,0 +1,684 @@
+1) Create the following table and perform the necessary commands given below :
+(a) Create Table Student with following attributes:
+1.) Roll_No 2.) Name 3.) Date_of_Birth 4.) Branch 5.) Semester 6.) Address 7.) Year_of _Admission
+ANS: CREATE TABLE Student (
+ Roll_No INT PRIMARY KEY,
+ Name VARCHAR(50),
+ Date_of_Birth DATE,
+ Branch VARCHAR(50),
+ Semester INT,
+ Address VARCHAR(255),
+ Year_of_Admission INT
+);
+(b) Enter at least 10 records in the above table and answer the following queries using SQL :
+INSERT INTO Student (Roll_No, Name, Date_of_Birth, Branch, Semester, Address, Year_of_Admission)
+VALUES
+ (1, 'John Doe', '2008-01-01', 'EXTC', 3, '123 Main St, City', 2015),
+ (2, 'Jane Smith', '2005-03-15', 'Computer', 5, '456 Elm St, Town', 2014),
+ (3, 'Alice Johnson', '2000-07-10', 'IT', 4, '789 Oak St, Village', 2016),
+ (4, 'Bob Williams', '2001-11-20', 'EXTC', 2, '101 Pine St, Country', 2015),
+ (5, 'Emily Brown', '2007-04-25', 'IT', 6, '202 Maple St, City', 2013),
+ (6, 'Michael Davis', '2003-09-30', 'Computer', 5, '303 Cedar St, Town', 2014),
+ (7, 'Sarah Wilson', '2002-05-12', 'IT', 2, '404 Birch St, Village', 2016),
+ (8, 'Daniel Lee', '2006-08-18', 'EXTC', 4, '505 Fir St, Country', 2015),
+ (9, 'Olivia Taylor', '2004-12-05', 'IT', 3, '606 Pine St, City', 2017),
+ (10, 'Ethan Martinez', '2009-02-28', 'Computer', 1, '707 Elm St, Town', 2018);
+i.) Find the name of all the students who are enrolled in EXTC branch and having date of birth as 01/01/2008
+SELECT Name 
+FROM Student 
+WHERE Branch = 'EXTC' AND Date_of_Birth = '2008-01-01';
+ii.) List the name and roll number of all the students who are enrolled in year 2015.
+SELECT Roll_No, Name 
+FROM Student 
+WHERE Year_of_Admission = 2015;
+iii.)List the name and address of all the students who are currently in fifth semester for Computer department
+SELECT Name, Address 
+FROM Student 
+WHERE Semester = 5 AND Branch = 'Computer';
+iv.)Retrieve total number of students enrolled in IT department
+SELECT COUNT(*) 
+FROM Student 
+WHERE Branch = 'IT';
+
+2) Write a query in SQL to create a table employee and department. Employee(empno,ename,deptno,job,hiredate)
+Department(deptno,dname,loc)
+ B. Include the following constraints on column of dept table.
+i) make deptno as primary key.
+ii) dname,loc attributes does not contain NULL values
+iii)enforce REFERENTIAL INTEGRITY where deptno attribute of dept table as primary key
+and deptno attribute of emp table as foreign key.
+iv) put default value ofloc as “Mumbai”
+CREATE TABLE Department (
+ deptno INT PRIMARY KEY,
+ dname VARCHAR(50) NOT NULL,
+ loc VARCHAR(50) DEFAULT 'Mumbai'
+);
+A. Include the following constraints on column of Employee table.
+i) make empno as primary key of the table
+ii) ename attribute does not contain NULL values
+CREATE TABLE Employee (
+ empno INT PRIMARY KEY,
+ ename VARCHAR(50) NOT NULL,
+ deptno INT,
+ job VARCHAR(50),
+ hiredate DATE
+);
+iii) job attribute allow only UPPERCASE entries
+DELIMITER //
+CREATE TRIGGER uppercase_job_trigger BEFORE INSERT ON Employee
+FOR EACH ROW
+BEGIN
+ SET NEW.job = UPPER(NEW.job);
+END//
+DELIMITER ;
+iv) put the current date as default date in hire date column in case data is not supplied for the
+column.
+ALTER TABLE Employee
+MODIFY COLUMN hiredate DATETIME DEFAULT CURRENT_TIMESTAMP;
+Write a query in SQL to create a table employee and department with following attributes. 
+Employee(empno,ename,deptno,job,hiredate) Department(deptno,dname,loc)
+INSERT INTO Employee (empno, ename, deptno, job, hiredate) VALUES
+(1, 'John Doe', 20, 'Engineer', '2024-04-25'),
+(2, 'Jane Smith', 20, 'Analyst', '2024-04-26'),
+(3, 'Alice Johnson', 30, 'Manager', '2024-04-27'),
+(4, 'Bob Williams', 30, 'Developer', '2024-04-28'),
+(5, 'Emily Brown', 20, 'Designer', '2024-04-29'),
+(6, 'Michael Davis', 30, 'Tester', '2024-04-30'),
+(7, 'Sarah Wilson', 20, 'Engineer', '2024-05-01'),
+(8, 'Daniel Lee', 30, 'Analyst', '2024-05-02'),
+(9, 'Olivia Taylor', 20, 'Manager', '2024-05-03'),
+(10, 'Ethan Martinez', 30, 'Developer', '2024-05-04');
+1. Give list of emp name & their job spec who are working in dept no 20?
+SELECT ename, job
+FROM Employee
+WHERE deptno = 20;
+2. Retrieve the details of emp working in dept no 30 ?
+SELECT *
+FROM Employee
+WHERE deptno = 30;
+3. Find list of emp whose empno is greater then manager no ?
+ALTER TABLE Employee
+ADD COLUMN manager_no INT;
+UPDATE Employee
+SET manager_no = 
+ CASE 
+ WHEN ename = 'John Doe' THEN 3
+ WHEN ename = 'Jane Smith' THEN 3 
+ WHEN ename = 'Alice Johnson' THEN NULL 
+ WHEN ename = 'Bob Williams' THEN 3 
+ WHEN ename = 'Emily Brown' THEN 3 
+ WHEN ename = 'Michael Davis' THEN 3 
+ WHEN ename = 'Sarah Wilson' THEN 3 
+ WHEN ename = 'Daniel Lee' THEN 3
+ WHEN ename = 'Olivia Taylor' THEN NULL 
+ WHEN ename = 'Ethan Martinez' THEN 3 
+ END;
+SELECT *FROM Employee
+WHERE empno > manager_no;
+4. Find all manager not working in dept no 10 ?
+SELECT *
+FROM Employee
+WHERE job = 'Manager' AND deptno != 10;
+5. To find the total number of employees.
+SELECT COUNT(*)
+FROM Employee;
+4) Write a query in sql to create a table employee and department.
+Employee(empno,ename,deptno,job,hiredate)
+Department(deptno,dname,loc)
+INSERT INTO Employee (empno, ename, deptno, job, hiredate) VALUES
+(101, 'Allen', 20, 'Engineer', '2001-01-15'),
+(102, 'Jane', 30, 'Manager', '2000-12-31'),
+(103, 'Alice', 40, 'Clerk', '2001-02-28'),
+(104, 'Emily', 30, 'Clerk', '2001-04-30'),
+(105, 'Michael', 40, 'Manager', '2001-05-15'),
+(106, 'Sarah', 20, 'Clerk', '2001-06-30'),
+(107, 'Daniel', 30, 'Engineer', '2001-07-15');
+INSERT INTO Department (deptno, dname, loc) VALUES
+(10, 'HR', 'New York'),
+(20, 'Engineering', 'San Francisco'),
+(30, 'IT', 'Los Angeles'),
+(40, 'Finance', 'Chicago'),
+(50, 'Marketing', 'Seattle');
+1. To find the total number of clerk hired after 13-Jan-2001.
+SELECT COUNT(*)
+FROM Employee
+WHERE job = 'Clerk' AND hiredate > '2001-01-13';
+2. Determine which department having more than two people holding a same job?
+SELECT deptno, job, COUNT(*) AS num_employees
+FROM Employee
+GROUP BY deptno, job
+HAVING COUNT(*) > 2;
+3. Find all departments that have at least two clerks?
+SELECT deptno
+FROM Employee
+WHERE job = 'Clerk'
+GROUP BY deptno
+HAVING COUNT(*) >= 2;
+4. Retrieve emp name and job who have the same job as that of „Allen‟?
+SELECT ename, job
+FROM Employee
+WHERE job = (SELECT job FROM Employee WHERE ename = 'Allen');
+5. List all emp name and their job of those department that are located at Chicago?
+SELECT e.ename, e.job
+FROM Employee e
+JOIN Department d ON e.deptno = d.deptno
+WHERE d.loc = 'Chicago';
+5) Write a query in sql to create a table employee and department.
+Employee(empno,ename,deptno,job,hiredate,salary) Department(deptno,dname,loc)
+INSERT INTO Department (deptno, dname, loc) VALUES
+(10, 'HR', 'New York'),
+(20, 'Engineering', 'San Francisco'),
+(30, 'IT', 'Los Angeles'),
+(40, 'Finance', 'Chicago'),
+(50, 'Marketing', 'Seattle');
+INSERT INTO Employee (empno, ename, deptno, job, hiredate, salary) VALUES
+(1, 'John Doe', 10, 'Manager', '2001-01-15', 50000),
+(2, 'Jane Smith', 20, 'Engineer', '2000-12-31', 60000),
+(3, 'Alice Johnson', 30, 'Clerk', '2001-02-28', 40000),
+(4, 'Bob Williams', 10, 'Engineer', '2001-03-15', 55000),
+(5, 'Emily Brown', 20, 'Manager', '2001-04-30', 65000),
+(6, 'Michael Davis', 30, 'Clerk', '2001-05-15', 42000),
+(7, 'Sarah Wilson', 10, 'Clerk', '2001-06-30', 43000),
+(8, 'Daniel Lee', 20, 'Engineer', '2001-07-15', 58000),
+(9, 'Olivia Taylor', 30, 'Manager', '2001-08-31', 70000),
+(10, 'Ethan Martinez', 20, 'Clerk', '2001-09-30', 45000);
+1. To get all employees working for dept 10 and 20.
+SELECT *FROM Employee
+WHERE deptno IN (10, 20);
+2. To list all employees whose name begins with „J‟.
+SELECT *FROM Employee
+WHERE ename LIKE 'J%';
+3. Retrieve all details of employees whose name is either Smith, Blake, Allen, Scott, Clark and King ?
+SELECT *FROM Employee
+WHERE ename IN ('Smith', 'Blake', 'Allen', 'Scott', 'Clark', 'King');
+4. Create view on appropriate tables to display ename , job , salary , dept name?
+CREATE VIEW EmployeeDetails AS
+SELECT e.ename, e.job, e.salary, d.dname AS dept_name
+FROM Employee e
+JOIN Department d ON e.deptno = d.deptno;
+5. Drop the above view
+DROP VIEW IF EXISTS EmployeeDetails;
+6) Write a query in sql to create a table employee and department.
+Employee(empno,ename,deptno,job,hiredate,salary)
+Department(deptno,dname,loc)
+1. To select the employees whose salary is greater than the salary of all employees working in dept no. 30
+SELECT *FROM Employee
+WHERE salary > ALL (SELECT salary FROM Employee WHERE deptno = 30);
+2. To list all employees in the ascending order by name.
+SELECT *FROM Employee
+ORDER BY ename ASC;
+3. To select all employees sorted dept wise in ascending order and within dept salary wise in descending
+order.
+SELECT *FROM Employee
+ORDER BY deptno ASC, salary DESC;
+4. To select all employees working in location whose name is starting with L
+SELECT *FROM Employee
+JOIN Department d ON e.deptno = d.deptno
+WHERE d.loc LIKE 'L%';
+5. To find the minimum salary of managers in various depts.
+SELECT deptno, MIN(salary) AS min_salary
+FROM Employee
+WHERE job = 'Manager'
+GROUP BY deptno;
+9) Create table employee with following attributes and insert 10 record (Apply following query)
+Employee(empno,ename,deptno,job,hiredate,salary)
+Department(deptno,dname,loc)
+CREATE TABLE Employee (
+ empno INT PRIMARY KEY,
+ ename VARCHAR(50),
+ deptno INT,
+ job VARCHAR(50),
+ hiredate DATE,
+ salary DECIMAL(10, 2)
+);
+CREATE TABLE Department (
+ deptno INT PRIMARY KEY,
+ dname VARCHAR(50),
+ loc VARCHAR(50)
+);
+INSERT INTO Employee (empno, ename, deptno, job, hiredate, salary) VALUES
+(1, 'John Doe', 10, 'Manager', '2001-01-15', 50000),
+(2, 'Jane Smith', 20, 'Engineer', '2000-12-31', 60000),
+(3, 'Alice Johnson', 30, 'Clerk', '2001-02-28', 40000),
+(4, 'Bob Williams', 10, 'Engineer', '2001-03-15', 55000),
+(5, 'Emily Brown', 20, 'Manager', '2001-04-30', 65000),
+(6, 'Michael Davis', 30, 'Clerk', '2001-05-15', 42000),
+(7, 'Sarah Wilson', 10, 'Clerk', '2001-06-30', 43000),
+(8, 'Daniel Lee', 20, 'Engineer', '2001-07-15', 58000),
+(9, 'Olivia Taylor', 30, 'Manager', '2001-08-31', 70000),
+(10, 'Ethan Martinez', 20, 'Clerk', '2001-09-30', 45000);
+1. To list employees whose name begins with „J‟ and has „N‟ as the third character?
+SELECT *
+FROM Employee
+WHERE ename LIKE 'JN%';
+2. To list all employees not entitled for commission.
+SELECT *
+FROM Employee
+WHERE commission = 0;
+3. To get all the employees whose salary is greater than the average salary of the company.
+SELECT *
+FROM Employee
+WHERE salary > (SELECT AVG(salary) FROM Employee);
+4. To find out average minimum and maximum salary of each dept.
+SELECT deptno, AVG(salary) AS avg_salary, MIN(salary) AS min_salary, MAX(salary) AS max_salary
+FROM Employee
+GROUP BY deptno;
+5. Create view on emp to display sum of salary grouped according to deptno
+CREATE VIEW SumSalaryByDept AS
+SELECT deptno, SUM(salary) AS total_salary
+FROM Employee
+GROUP BY deptno;
+10) Consider the following schema:
+Suppliers(sid: integer, sname: string, address: string)
+Parts(pid: integer, pname: string, color: string)
+Catalog(sid: integer, pid: integer, cost: real)
+The Catalog relation lists the prices charged for parts by Suppliers.
+Write the following queries in SQL:
+CREATE TABLE Suppliers (
+ sid INT PRIMARY KEY,
+ sname VARCHAR(100),
+ address VARCHAR(255)
+);
+INSERT INTO Suppliers (sid, sname, address) VALUES
+(1, 'Supplier A', '123 Main St'),
+(2, 'Supplier B', '456 Elm St'),
+(3, 'Supplier C', '789 Oak St');
+CREATE TABLE Parts (
+ pid INT PRIMARY KEY,
+ pname VARCHAR(100),
+ color VARCHAR(50)
+);
+INSERT INTO Parts (pid, pname, color) VALUES
+(101, 'Part 1', 'red'),
+(102, 'Part 2', 'green'),
+(103, 'Part 3', 'blue');
+CREATE TABLE Catalog (
+ sid INT,
+ pid INT,
+ cost REAL,
+ FOREIGN KEY (sid) REFERENCES Suppliers(sid),
+ FOREIGN KEY (pid) REFERENCES Parts(pid)
+);
+INSERT INTO Catalog (sid, pid, cost) VALUES
+(1, 101, 10.99),
+(1, 102, 20.99),
+(2, 101, 15.99),
+(2, 103, 25.99),
+(3, 101, 12.99),
+(3, 102, 22.99),
+(3, 103, 32.99);
+1. For each part, find the sname of the supplier who charges the most for that part.
+SELECT p.pname, s.sname
+FROM Parts p
+JOIN Catalog c ON p.pid = c.pid
+JOIN Suppliers s ON c.sid = s.sid
+WHERE c.cost = (SELECT MAX(cost) FROM Catalog WHERE pid = p.pid);
+2. Find the sids of suppliers who supply only red parts.
+SELECT DISTINCT c.sid
+FROM Catalog c
+JOIN Parts p ON c.pid = p.pid
+WHERE p.color = 'red'
+AND NOT EXISTS (
+ SELECT 1
+ FROM Catalog c2
+ JOIN Parts p2 ON c2.pid = p2.pid
+ WHERE c2.sid = c.sid AND p2.color <> 'red'
+);
+3. Find the sids of suppliers who supply a red part and a green part.
+SELECT c.sid
+FROM Catalog c
+JOIN Parts p ON c.pid = p.pid
+WHERE p.color IN ('red', 'green')
+GROUP BY c.sid
+HAVING COUNT(DISTINCT p.color) = 2;
+4. Find the snames of suppliers who supply every red part.
+SELECT s.sname
+FROM Suppliers s
+WHERE NOT EXISTS (
+ SELECT 1
+ FROM Parts p
+ WHERE p.color = 'red'
+ AND NOT EXISTS (
+ SELECT 1
+ FROM Catalog c
+ WHERE c.sid = s.sid AND c.pid = p.pid
+ )
+);
+5. Find the pnames of parts supplied by Acme Widget Suppliers and no one else.
+SELECT p.pname
+FROM Parts p
+JOIN Catalog c ON p.pid = c.pid
+JOIN Suppliers s ON c.sid = s.sid
+WHERE s.sname = 'Acme Widget Suppliers'
+AND NOT EXISTS (
+ SELECT 1
+ FROM Catalog c2
+ JOIN Suppliers s2 ON c2.sid = s2.sid
+ WHERE c.pid = c2.pid AND s2.sname <> 'Acme Widget Suppliers'
+);
+11) Create a table customer(acc_no, cust_name, avail_balance)
+Create table mini_statement(acc_no, avail_balance)
+Insert into customer following records:
+Customer(1000, “Fanny”, 7000);
+Customer(1001,”Peter”, 12000);
+Write a trigger to insert old values into mini_statement table(including acc_no, avail_balance as parameters)
+before updating any record in customer table
+-- Create the customer table
+CREATE TABLE customer (
+ acc_no INT PRIMARY KEY,
+ cust_name VARCHAR(255),
+ avail_balance DECIMAL(10, 2)
+);
+-- Create the mini_statement table
+CREATE TABLE mini_statement (
+ acc_no INT,
+ avail_balance DECIMAL(10, 2)
+);
+-- Insert records into the customer table
+INSERT INTO customer (acc_no, cust_name, avail_balance) VALUES
+(1000, 'Fanny', 7000),
+(1001, 'Peter', 12000);
+-- Create the trigger
+DELIMITER //
+CREATE TRIGGER before_customer_update
+BEFORE UPDATE ON customer
+FOR EACH ROW
+BEGIN
+ INSERT INTO mini_statement (acc_no, avail_balance)
+ VALUES (OLD.acc_no, OLD.avail_balance);
+END;
+//
+DELIMITER ;
+12) Create a table customer(acc_no, cust_name, avail_balance) Create table micro_statement(acc_no, avail_balance) Insert 
+following record in table customer: Customer(1000, “Fanny”, 7000); Customer(1001,”Peter”, 12000); 
+Customer(1002,”Janitor”, 4500) Write a trigger to insert new values of acc_no and avail_balance in micro_statement after an 
+update has occurred
+-- Create the customer table
+CREATE TABLE customer (
+ acc_no INT PRIMARY KEY,
+ cust_name VARCHAR(255),
+ avail_balance DECIMAL(10, 2)
+);
+-- Create the micro_statement table
+CREATE TABLE micro_statement (
+ acc_no INT,
+ avail_balance DECIMAL(10, 2)
+);
+-- Insert records into the customer table
+INSERT INTO customer (acc_no, cust_name, avail_balance) VALUES
+(1000, 'Fanny', 7000),
+(1001, 'Peter', 12000),
+(1002, 'Janitor', 4500);
+-- Create the trigger
+DELIMITER //
+CREATE TRIGGER after_customer_update
+AFTER UPDATE ON customer
+FOR EACH ROW
+BEGIN
+ INSERT INTO micro_statement (acc_no, avail_balance)
+ VALUES (NEW.acc_no, NEW.avail_balance);
+END;
+//
+DELIMITER ;
+13) Create a table customer (cust_id, cust_name, balance) and insert 3 records to it Write a transaction which update the 
+balance of all 3 customers and using TCL Commands(Commit, Rollback and Savepoint) show the changes made to actual 
+records
+ CREATE TABLE customer (
+ cust_id INT PRIMARY KEY,
+ cust_name VARCHAR(50),
+ balance DECIMAL(10, 2)
+);
+INSERT INTO customer (cust_id, cust_name, balance) VALUES
+(1, 'Alice', 5000.00),
+(2, 'Bob', 7000.00),
+(3, 'Charlie', 6000.00);
+BEGIN; -- Start transaction
+-- Update balances
+UPDATE customer SET balance = balance + 1000 WHERE cust_id = 1; -- Alice
+UPDATE customer SET balance = balance - 500 WHERE cust_id = 2; -- Bob
+UPDATE customer SET balance = balance + 1500 WHERE cust_id = 3; -- Charlie
+-- Show changes
+SELECT * FROM customer;
+-- Savepoint
+SAVEPOINT changes_made;
+-- ROLLBACK to the savepoint
+ROLLBACK TO changes_made;
+-- Show original records
+SELECT * FROM customer;
+-- Commit the transaction
+COMMIT;
+14) Create a table student (student_id, stud_name, percentage) and insert 3 records to it
+Write a transaction which update the percentage of all 3 students and using TCL Commands(Commit, Rollback
+and Savepoint) show the changes made to actual records
+CREATE TABLE student (
+ student_id INT PRIMARY KEY,
+ stud_name VARCHAR(50),
+ percentage DECIMAL(5, 2)
+);
+INSERT INTO student (student_id, stud_name, percentage) VALUES
+(1, 'Alice', 85.00),
+(2, 'Bob', 78.50),
+(3, 'Charlie', 92.00);
+BEGIN; -- Start transaction
+-- Update percentages
+UPDATE student SET percentage = percentage + 5 WHERE student_id = 1; -- Alice
+UPDATE student SET percentage = percentage - 3 WHERE student_id = 2; -- Bob
+UPDATE student SET percentage = percentage + 2 WHERE student_id = 3; -- Charlie
+-- Show changes
+SELECT * FROM student;
+-- Savepoint
+SAVEPOINT changes_made;
+-- ROLLBACK to the savepoint
+ROLLBACK TO changes_made;
+-- Show original records
+SELECT * FROM student;
+-- Commit the transaction
+COMMIT;
+15) Consider the relational database. Write an expression in SQL for following schema
+employee(employee-name, street, city)
+works(employee-name, company-name, salary)
+company(company-name, city)
+manages(employee-name,manager-name)
+CREATE TABLE employee (
+ employee_name VARCHAR(255),
+ street VARCHAR(255),
+ city VARCHAR(255)
+);
+CREATE TABLE works (
+ employee_name VARCHAR(255),
+ company_name VARCHAR(255),
+ salary DECIMAL(10, 2)
+);
+CREATE TABLE company (
+ company_name VARCHAR(255),
+ city VARCHAR(255)
+);
+CREATE TABLE manages (
+ employee_name VARCHAR(255),
+ manager_name VARCHAR(255)
+);
+-- Insert values into the employee table
+INSERT INTO employee (employee_name, street, city) VALUES
+('John Smith', '123 Main St', 'New York'),
+('Alice Johnson', '456 Elm St', 'Los Angeles'),
+('Bob Williams', '789 Oak St', 'Chicago');
+-- Insert values into the works table
+INSERT INTO works (employee_name, company_name, salary) VALUES
+('John Smith', 'XYZ Corporation', 50000),
+('Alice Johnson', 'ABC Inc.', 60000),
+('Bob Williams', '123 Industries', 55000);
+-- Insert values into the company table
+INSERT INTO company (company_name, city) VALUES
+('XYZ Corporation', 'New York'),
+('ABC Inc.', 'Los Angeles'),
+('123 Industries', 'Chicago');
+-- Insert values into the manages table
+INSERT INTO manages (employee_name, manager_name) VALUES
+('Alice Johnson', 'John Smith'),
+('Bob Williams', 'Alice Johnson');
+i) Retrieve details of all employees working for “Infosys” company
+SELECT e.employee_name, e.street, e.city
+FROM employee e
+JOIN works w ON e.employee_name = w.employee_name
+JOIN company c ON w.company_name = c.company_name
+WHERE c.company_name = 'Infosys';
+ii) Retrieve employee-name in uppercase for all employees
+SELECT UPPER(employee_name) AS employee_name_upper
+FROM employee;
+iii) Replace existing company name of employees from Infosys to TCS
+UPDATE works
+SET company_name = 'TCS'
+WHERE company_name = 'Infosys';
+iv) Retrieve manager name along with employee name working for “TCS” company
+SELECT e.employee_name, m.manager_name
+FROM employee e
+JOIN manages m ON e.employee_name = m.employee_name
+JOIN works w ON e.employee_name = w.employee_name
+WHERE w.company_name = 'TCS';
+v) Retrieve details of all employees whose ename starts with “P”
+SELECT *
+FROM employee
+WHERE employee_name LIKE 'P%';
+16) Consider an online bookstore database with the following tables: 
+ books: Contains information about books such as book_id, title, author_id, genre_id, and price.
+ authors: Contains information about authors such as author_id, author_name, and country. 
+ genres: Contains information about book genres such as genre_id and genre_name.
+ customers: Contains information about customers such as customer_id, name, email, and city. 
+ orders: Contains information about orders such as order_id, customer_id, order_date, and total_amount. 
+ order_details: Contains information about the details of each order such as order_detail_id, order_id, book_id, quantity, and
+subtotal.
+-- Create authors table
+CREATE TABLE authors (
+ author_id INT PRIMARY KEY,
+ author_name VARCHAR(255),
+ country VARCHAR(255)
+);
+-- Create genres table
+CREATE TABLE genres (
+ genre_id INT PRIMARY KEY,
+ genre_name VARCHAR(255)
+);
+-- Create books table
+CREATE TABLE books (
+ book_id INT PRIMARY KEY,
+ title VARCHAR(255),
+ author_id INT,
+ genre_id INT,
+ price DECIMAL(10, 2),
+ FOREIGN KEY (author_id) REFERENCES authors(author_id),
+ FOREIGN KEY (genre_id) REFERENCES genres(genre_id)
+);
+-- Create customers table
+CREATE TABLE customers (
+ customer_id INT PRIMARY KEY,
+ name VARCHAR(255),
+ email VARCHAR(255),
+ city VARCHAR(255)
+);
+-- Create orders table
+CREATE TABLE orders (
+ order_id INT PRIMARY KEY,
+ customer_id INT,
+ order_date DATE,
+ total_amount DECIMAL(10, 2),
+ FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+);
+-- Create order_details table
+CREATE TABLE order_details (
+ order_detail_id INT PRIMARY KEY,
+ order_id INT,
+ book_id INT,
+ quantity INT,
+ subtotal DECIMAL(10, 2),
+ FOREIGN KEY (order_id) REFERENCES orders(order_id),
+ FOREIGN KEY (book_id) REFERENCES books(book_id)
+);
+-- Insert sample data into authors table
+INSERT INTO authors (author_id, author_name, country) VALUES
+(1, 'Author 1', 'Country 1'),
+(2, 'Author 2', 'Country 2'),
+(3, 'Author 3', 'Country 3');
+-- Insert sample data into genres table
+INSERT INTO genres (genre_id, genre_name) VALUES
+(1, 'Genre 1'),
+(2, 'Genre 2'),
+(3, 'Genre 3');
+-- Insert sample data into books table
+INSERT INTO books (book_id, title, author_id, genre_id, price) VALUES
+(1, 'Book 1', 1, 1, 20.00),
+(2, 'Book 2', 2, 2, 25.00),
+(3, 'Book 3', 3, 3, 30.00);
+-- Insert sample data into customers table
+INSERT INTO customers (customer_id, name, email, city) VALUES
+(1, 'Customer 1', 'customer1@example.com', 'City 1'),
+(2, 'Customer 2', 'customer2@example.com', 'City 2'),
+(3, 'Customer 3', 'customer3@example.com', 'City 3');
+-- Insert sample data into orders table
+INSERT INTO orders (order_id, customer_id, order_date, total_amount) VALUES
+(1, 1, '2024-04-01', 50.00),
+(2, 2, '2024-04-02', 75.00),
+(3, 3, '2024-04-03', 100.00);
+-- Insert sample data into order_details table
+INSERT INTO order_details (order_detail_id, order_id, book_id, quantity, subtotal) VALUES
+(1, 1, 1, 2, 40.00),
+(2, 2, 2, 3, 75.00),
+(3, 3, 3, 1, 30.00);
+1. Get the list of books with their authors and genres
+SELECT b.title AS book_title, a.author_name, g.genre_name
+FROM books b
+JOIN authors a ON b.author_id = a.author_id
+JOIN genres g ON b.genre_id = g.genre_id;
+2. Get the total amount spent by each customer:
+SELECT c.name AS customer_name, SUM(o.total_amount) AS total_spent
+FROM customers c
+JOIN orders o ON c.customer_id = o.customer_id
+GROUP BY c.name;
+3. Get the list of customers along with the titles of books they have ordered
+SELECT c.name AS customer_name, b.title AS book_title
+FROM customers c
+JOIN orders o ON c.customer_id = o.customer_id
+JOIN order_details od ON o.order_id = od.order_id
+JOIN books b ON od.book_id = b.book_id;
+4. Get the top-selling authors (authors with the highest total number of book sales)
+SELECT a.author_name, COUNT(od.order_detail_id) AS total_sales
+FROM authors a
+JOIN books b ON a.author_id = b.author_id
+JOIN order_details od ON b.book_id = od.book_id
+GROUP BY a.author_name
+ORDER BY total_sales DESC
+LIMIT 1;
+17) We have a database for an online bookstore with relations books and customer, and we want to grant
+specific privileges to different users.
+Create a new user named 'bookstore_manager' with a password.
+CREATE USER 'bookstore_manager'@'%' IDENTIFIED BY 'password';
+Grant the SELECT privilege on the 'books' table to the 'bookstore_manager' user, allowing them to
+retrieve data from the 'books' table.
+GRANT SELECT ON Employee TO 'bookstore_manager'@'%';
+Grant the INSERT, UPDATE, and DELETE privileges on the 'customers' table to the
+'bookstore_manager' user, allowing them to insert, update, and delete records in the 'customers' table.
+GRANT INSERT, UPDATE, DELETE ON Employee TO 'bookstore_manager'@'%';
+18) Let's consider a scenario where a customer places an order on our online bookstore. We want to ensure that
+the order process is treated as a single transaction. Apply TCL commands using following steps
+We begin a transaction using the BEGIN TRANSACTION command.
+We insert the order details (such as customer ID, order date, and total amount) into the 'orders' table.
+We insert the individual items of the order (book ID, quantity, and subtotal) into the 'order_details' table.
+We perform a check to ensure that the total amount matches the sum of individual subtotals. If the
+validation fails, we rollback the transaction using the ROLLBACK command.
+If the validation succeeds, we commit the transaction using the COMMIT command
+-- Step 1: Begin the transaction
+START TRANSACTION;
+-- Step 2: Insert the order details into the 'orders' table
+INSERT INTO orders (customer_id, order_date, total_amount) VALUES (1, '2024-04-01', 50.00);
+-- Step 3: Insert the individual items of the order into the 'order_details' table
+INSERT INTO order_details (order_id, book_id, quantity, subtotal) VALUES (1, 1, 2, 40.00);
+-- Step 4: Perform a check to ensure that the total amount matches the sum of individual subtotals
+SELECT SUM(subtotal) AS total_subtotal FROM order_details WHERE order_id = 1 INTO @subtotal_sum;
+-- Step 5: If the validation fails, rollback the transaction
+IF @subtotal_sum <> (SELECT total_amount FROM orders WHERE order_id = 1) THEN
+ ROLLBACK;
+ SELECT 'Validation failed, transaction rolled back.';
+ELSE
+ -- Step 6: If the validation succeeds, commit the transaction
+ COMMIT;
+ SELECT 'Validation succeeded, transaction committed.';
+END IF;
